@@ -1,6 +1,6 @@
 services:
   web:
-    build: sahy1234/collective1:latest
+    image: sahy1234/collective1:latest
     volumes:
       # - .:/app
       - ./db.sqlite3:/app/db.sqlite3
