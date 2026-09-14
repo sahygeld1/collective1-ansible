@@ -28,7 +28,7 @@
 
     - name: Run Django database migrations
       community.docker.docker_compose_v2_exec:
-        project_src: "{{ app_dir }}"
+        project_src: "."
         service: web
         command: python manage.py migrate --noinput
       register: migrate_output
