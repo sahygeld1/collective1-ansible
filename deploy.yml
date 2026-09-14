@@ -7,10 +7,7 @@
     app_dir: "/home/yc/collective1-ansible"
 
   tasks:
-    - name: Ensure community.docker collection is installed
-      ansible.builtin.command:
-        cmd: ansible-galaxy collection install community.docker
-      changed_when: false
+    # 1. System dependencies via APT (reliable, cached)
     - name: Ensure required system and Python dependencies are installed
       ansible.builtin.apt:
         name:
@@ -20,7 +17,7 @@
           - python3-requests
         state: present
         update_cache: yes
-        
+
     - name: Ensure db.sqlite3 exists as a file (to avoid folder mount creation)
       file:
         path: "{{ app_dir }}/db.sqlite3"
