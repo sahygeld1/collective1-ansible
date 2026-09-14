@@ -11,7 +11,16 @@
       ansible.builtin.command:
         cmd: ansible-galaxy collection install community.docker
       changed_when: false
-
+    - name: Ensure required system and Python dependencies are installed
+      ansible.builtin.apt:
+        name:
+          - python3-pip
+          - python3-setuptools
+          - python3-docker
+          - python3-requests
+        state: present
+        update_cache: yes
+        
     - name: Ensure db.sqlite3 exists as a file (to avoid folder mount creation)
       file:
         path: "{{ app_dir }}/db.sqlite3"
