@@ -7,4 +7,4 @@ ansible-playbook -i inventory.ini deploy.yml
 
 chmod +x /home/yc/collective1-ansible/deploy.sh
 
-deploy.sh
+./deploy.sh
