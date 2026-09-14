@@ -1,11 +1,16 @@
 ---
 - name: Local Server Deployment via Ansible
-  hosts: prod 
+  hosts: prod
   become: true
   vars:
     docker_image: "sahy1234/collective1:latest"
 
   tasks:
+    - name: Ensure community.docker collection is installed
+      ansible.builtin.command:
+        cmd: ansible-galaxy collection install community.docker
+      changed_when: false
+
     - name: Ensure db.sqlite3 exists as a file (to avoid folder mount creation)
       file:
         path: "./db.sqlite3"
