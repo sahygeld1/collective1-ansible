@@ -1,6 +1,3 @@
-# sudo apt install -y ansible python3-pip
-# ansible-playbook -i inventory.ini deploy.yml
-
 ---
 - name: Local Server Deployment via Ansible
   hosts: prod 
