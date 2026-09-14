@@ -1,0 +1,45 @@
+# sudo apt install -y ansible python3-pip
+# ansible-playbook -i inventory.ini deploy.yml
+
+---
+- name: Local Server Deployment via Ansible
+  hosts: prod 
+  become: true
+  vars:
+    docker_image: "sahy1234/collective1:latest"
+
+  tasks:
+    - name: Ensure db.sqlite3 exists as a file (to avoid folder mount creation)
+      file:
+        path: "./db.sqlite3"
+        state: touch
+        mode: "0666"
+        modification_time: preserve
+        access_time: preserve
+
+    - name: Pull latest image from Docker Hub
+      community.docker.docker_image:
+        name: "{{ docker_image }}"
+        source: pull
+        force_source: true
+
+    - name: Start and update Docker Compose stack
+      community.docker.docker_compose_v2:
+        project_src: "."
+        state: present
+        pull: always
+
+    - name: Run Django database migrations
+      community.docker.docker_compose_v2_exec:
+        project_src: "{{ app_dir }}"
+        service: web
+        command: python manage.py migrate --noinput
+      register: migrate_output
+
+    - name: Display migration results
+      debug:
+        var: migrate_output.stdout_lines
+
+    - name: Prune old unused Docker images
+      community.docker.docker_prune:
+        images: true
